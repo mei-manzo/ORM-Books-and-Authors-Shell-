@@ -1,0 +1,147 @@
+>>> from books_authors_app.models import *
+>>> Books.objects.create(title="C Sharp", desc="Learn how to code in C Sharp")
+<Books: Books object (1)>
+>>> Books.objects.create(title="Java", desc= "Learn how to code in Java")
+<Books: Books object (2)>
+>>> Books.objects.create(title="Python", desc="Learn how to code in Python")
+<Books: Books object (3)>
+>>> Books.objects.create(title="PHP", desc="Learn how to code in PHP")
+<Books: Books object (4)>
+>>> Books.objects.create(title="Ruby", desc="Learn how to code in Ruby")
+<Books: Books object (5)>
+>>> Authors.objects.create(first_name="Jane", last_name="Austen")
+<Authors: Authors object (1)>
+>>> Authors.objects.create(first_name="Emily", last_name="Dickinson")
+<Authors: Authors object (2)>
+>>> Authors.objects.create(first_name="Fyodor", last_name="Dostoevsky")
+<Authors: Authors object (3)>
+>>> Authors.objects.create(first_name="William", last_name="Shakespeare")
+<Authors: Authors object (4)>
+>>> Authors.objects.create(first_name="Lau", last_name="Tzu")
+<Authors: Authors object (5)>
+>>> exit()
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py makemigrations
+You are trying to add a non-nullable field 'notes' to authors without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+Select an option:
+Please select a valid option: 1
+Please enter the default value now, as valid Python
+The datetime and django.utils.timezone modules are available, so you can do e.g. timezone.now
+Type 'exit' to exit this prompt
+>>> exit
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py makemigrations
+Migrations for 'books_authors_app':
+  books_authors_app\migrations\0002_authors_notes.py
+    - Add field notes to authors
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, books_authors_app, contenttypes, sessions
+Running migrations:
+  Applying books_authors_app.0002_authors_notes... OK
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py shell
+Python 3.6.5 (v3.6.5:f59c0932b4, Mar 28 2018, 17:00:18) [MSC v.1900 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from books_authors_app.models import *
+>>> c = books.objects.get(id=1)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'books' is not defined
+>>> c = Books.objects.get(id=1)
+>>> c.title = "C#"
+>>> c.save()
+>>> a = Authors.objects.get(id=1)
+>>> a = Authors.objects.get(id=4)
+>>> a.first_name = "Bill"
+>>> a.save()
+>>> exit()
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py makemigrations
+Migrations for 'books_authors_app':
+  books_authors_app\migrations\0003_authors_book.py
+    - Add field book to authors
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, books_authors_app, contenttypes, sessions
+Running migrations:
+  Applying books_authors_app.0003_authors_book... OK
+(django)
+Mei@Mei-PC MINGW64 ~/Desktop/Coding Dojo/python_stack/django/django_orm/books_authors_proj
+$ python manage.py shell
+Python 3.6.5 (v3.6.5:f59c0932b4, Mar 28 2018, 17:00:18) [MSC v.1900 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from books_authors_app.models import *
+>>> first_book_one = Books.objects.get(id=1)
+>>> first_book_two = Books.objects.get(id=2)
+>>> first_author = Authors.objects.get(id=1)
+>>> first_author.Books.add(first_book_one)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Authors' object has no attribute 'Books'
+>>> first_author.book.add(first_book_one)
+>>> first_author.book.add(first_book_two)
+>>> second_author = Authors.objects.get(id=2)
+>>> second_author.book.add(first_book_one)
+>>> second_author.book.add(first_book_two)
+>>> first_book_three = Books.objects.get(id=3)
+>>> second_author.book.add(first_book_three)
+>>> third_author = Authors.objects.get(id=3)
+>>> third_author.book.add(first_book_one)
+>>> third_author.book.add(first_book_two)
+>>> third_author.book.add(first_book_three)
+>>> first_book_four = Books.objects.get(id=4)
+>>> third_author.book.add(first_book_four)
+>>> for m in Books:
+...    exit()
+  File "<console>", line 2
+    exit()
+       ^
+IndentationError: expected an indented block
+>>> first_book_five = Books.objects.get(id=5)
+>>> fourth_author = Authors.objects.get(id=4)
+>>> for m in Books:
+...     fourth_author.book.add(m)
+...
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: 'ModelBase' object is not iterable
+>>> for m in Books:
+...
+... exit()
+  File "<console>", line 3
+    exit()
+       ^
+IndentationError: expected an indented block
+>>> fourth_author.book.add(first_book_one)
+>>> fourth_author.book.add(first_book_two)
+>>> fourth_author.book.add(first_book_three)
+>>> fourth_author.book.add(first_book_four)
+>>> fourth_author.book.add(first_book_five)
+>>> first_book_three.author.all()
+<QuerySet [<Authors: Authors object (2)>, <Authors: Authors object (3)>, <Authors: Authors object (4)>]>
+>>> first_book_three.author.remove(second_author)
+>>> fifth_author= Authors.objects.get(id=5)
+>>> fifth_author.book.add(first_book_two)
+>>> third_author.book.all()
+<QuerySet [<Books: Books object (1)>, <Books: Books object (2)>, <Books: Books object (3)>, <Books: Books object (4)>]>
+>>> first_book_five.authors.all()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Books' object has no attribute 'authors'
+>>> first_book_five.author.all()
+<QuerySet [<Authors: Authors object (4)>]>
+>>>
